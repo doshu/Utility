@@ -1,0 +1,74 @@
+.doshu-scrollbar-wrapper:hover .doshu-scrollbar {
+	opacity:1;
+	-moz-opacity:1;
+	-webkit-opacity:1;
+	-o-opacity:1;
+	-ms-opacity:1;
+	filter:aplha(100);
+}
+
+.doshu-scrollbar {
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	-o-border-radius:3px;
+	-ms-border-radius:3px;
+	background-color:#CCC;
+	background-color:rgba(100, 100, 100, 0.1);
+	transition:0.5s opacity ease;
+	-moz-transition:0.5s opacity ease;
+	-webkit-transition:0.5s opacity ease;
+	-o-transition:0.5s opacity ease;
+	-ms-transition:0.5s opacity ease;
+	opacity:0;
+	-moz-opacity:0;
+	-webkit-opacity:0;
+	-o-opacity:0;
+	-ms-opacity:0;
+	filter:aplha(0);
+}
+
+.doshu-cursor {
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	-o-border-radius:3px;
+	-ms-border-radius:3px;
+	background-color:#333;
+	background-color:rgba(0, 0, 0, 0.2);
+	cursor:pointer;
+	transition:2s opacity ease;
+	-moz-transition:2s opacity ease;
+	-webkit-transition:2s opacity ease;
+	-o-transition:2s opacity ease;
+	-ms-transition:2s opacity ease;
+}
+
+.doshu-vertical-scrollbar {
+	position:absolute;
+	top:0;
+	right:0;
+	width:10px;
+}
+
+.doshu-vertical-cursor {
+	position:relative;
+	top:0;
+	right:0;
+	width:10px;
+}
+
+
+.doshu-horizontal-scrollbar {
+	position:absolute;
+	bottom:0;
+	left:0;
+	height:10px;
+}
+
+.doshu-horizontal-cursor {
+	position:relative;
+	bottom:0;
+	left:0;
+	height:10px;
+}

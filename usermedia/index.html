@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<script src="ccv.js"></script>
+		<script src="face.js"></script>
+	</head>
+	<body>
+		<video id="v" controls autoplay="autoplay" hidden></video>
+		<canvas id="c" width="320" height="240"></canvas>
+		<script>
+
+			var url = window.webkitURL || window.URL;
+
+			function callback (stream) {
+				document.getElementById('v').src = url.createObjectURL(stream);
+			}
+			
+			var canvas = document.getElementById('c');
+			var cx = canvas.getContext('2d');
+	
+			function settings() {
+				canvas = document.getElementById('c');
+				cx = canvas.getContext('2d');
+				cx.fillStyle="rgba(255,0,0,0.6)";
+			}
+	
+			function draw() {
+				
+				cx.drawImage(document.getElementById('v'), 0, 0, 320, 240);
+				
+				var comp = ccv.detect_objects(
+					{
+						"canvas" : (ccv.pre(canvas)),
+		                "cascade" : cascade,
+		                "interval" : 6,
+		                "min_neighbors" : 1 
+		            }
+		        );
+		        
+		        for (var i = 0; i < comp.length; i++) {
+		        	cx.fillRect(comp[i].x, comp[i].y, comp[i].width, comp[i].height);
+					
+				}
+				
+				webkitRequestAnimationFrame(draw);
+			}
+	
+			if(navigator.webkitGetUserMedia) {
+				navigator.webkitGetUserMedia({video:true, audio:true}, callback);
+			}
+			else if(navigator.mozGetUserMedia) {
+				navigator.mozGetUserMedia({video:true, audio:true}, callback, null);
+			}
+			else if(navigator.getUserMedia) {
+				navigator.gUserMedia({video:true, audio:true}, callback);
+			}
+	
+			settings();
+			draw();
+	
+		</script>
+	</body>
+</html>

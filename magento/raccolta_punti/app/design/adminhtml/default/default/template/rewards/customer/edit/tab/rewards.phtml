@@ -1,0 +1,28 @@
+<?php
+	//$pf = Mage::getModel('paymentfilter/pf');
+	$customerData = $this->getCustomerData();
+	$currentPoints = isset($customerData['points'])?$customerData['points']:0;
+?>
+<div class="entry-edit">
+	<div class="entry-edit-head">
+    	<h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Punti raccolti dall\'utente'); ?></h4>
+    	<div class="form-buttons"></div>
+	</div>
+	<div id="" class="fieldset ">
+		<div class="hor-scroll">
+			<table cellspacing="0" class="form-list">
+				<tr>
+					<td class="label">
+						<label for="account_reward_points">
+							<?php echo $this->__('Punti Raccolti'); ?>
+						</label>
+					</td>
+					<td class="value">
+						<input class="input-text" type="text" id="account_reward_points" name="account[points]" value="<?php echo $currentPoints; ?>"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

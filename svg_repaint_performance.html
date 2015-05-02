@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	</head>
+	<body>
+		<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" width="744.09448" height="1052.3622" id="svg2">
+			<defs id="defs4" />
+			<metadata id="metadata7">
+				<rdf:RDF>
+					<cc:Work rdf:about="">
+					<dc:format>image/svg+xml</dc:format>
+					<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+					<dc:title></dc:title>
+					</cc:Work>
+				</rdf:RDF>
+			</metadata>
+			<g id="layer1">
+				<path d="m 297.14285,475.21933 c 18.04982,10.6007 -5.38439,29.56081 -17.61906,29.99999 -33.15521,1.19015 -48.63319,-37.64963 -42.38092,-65.23812 11.18384,-49.34933 68.27103,-69.63258 112.85717,-54.76184 65.43196,21.8234 91.11315,99.2568 67.14278,160.47622 C 385.19408,627.29145 286.77759,658.48583 209.04754,625.21929 111.2322,583.35673 74.480239,463.68881 117.1429,369.50495 168.81311,255.43568 309.87031,213.10305 420.47629,265.21939 550.82161,326.63669 598.74888,489.16343 537.14279,616.17183 466.01611,762.80807 281.96897,816.33918 138.57129,745.21925 -24.366273,664.40827 -83.507675,458.80641 -2.8570627,299.0287 87.620735,119.78226 314.80158,55.025878 490.95254,145.21942 686.51351,245.35135 756.88841,494.12895 657.14275,686.64808" transform="translate(40,34.285714)" id="path2985" style="fill:none;stroke:none" />
+				<text id="text2987" xml:space="preserve" style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><textPath xlink:href="#path2985" id="textPath3002"><tspan id="tspan2989" style="visibility:hidden">Esistono innumerevoli variazioni dei passaggi del Lorem Ipsum, ma la maggior parte hanno subito delle variazioni del tempo, a causa dell’inserimento di passaggi ironici, o di sequenze casuali di caratteri palesemente poco verosimili. Se si decide di utilizzare un passaggio del Lorem Ipsum, è bene essere certi che non contenga nulla di imbarazzante. In genere, i generatori di testo segnaposto disponibili su internet tendono a ripetere paragrafi predefiniti, rendendo questo il primo vero generatore automatico su intenet. Infatti utilizza un dizionario di oltre 200 vocaboli latini, combinati con un insieme di modelli di strutture di periodi, per generare passaggi di testo verosimili. Il testo così generato è sempre privo di ripetizioni, parole imbarazzanti o fuori luogo ecc.</tspan></textPath></text>
+			</g>
+		</svg>
+		
+		<script>
+		
+			var text = "Esistono innumerevoli variazioni dei passaggi del Lorem Ipsum, ma la maggior parte hanno subito delle variazioni del tempo, a causa dell’inserimento di passaggi ironici, o di sequenze casuali di caratteri palesemente poco verosimili. Se si decide di utilizzare un passaggio del Lorem Ipsum, è bene essere certi che non contenga nulla di imbarazzante. In genere, i generatori di testo segnaposto disponibili su internet tendono a ripetere paragrafi predefiniti, rendendo questo il primo vero generatore automatico su intenet. Infatti utilizza un dizionario di oltre 200 vocaboli latini, combinati con un insieme di modelli di strutture di periodi, per generare passaggi di testo verosimili. Il testo così generato è sempre privo di ripetizioni, parole imbarazzanti o fuori luogo ecc.";
+			
+			var i = 0;
+			
+			var path = document.getElementById('tspan2989');
+			
+			function draw() {
+				if(i < text.length && i < path.getNumberOfChars()) {
+					var c = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+					var p = path.getStartPositionOfChar(i);
+					var rotation = path.getRotationOfChar(i);
+					c.setAttribute('x', p.x);
+					c.setAttribute('y', p.y);
+					c.setAttribute('rotate', rotation);
+					c.textContent = text[i];
+					c.style.fontSize="15px";
+					document.getElementById('layer1').appendChild(c);
+					i++;
+					if(i < text.length)
+						window.requestAnimationFrame(draw);
+					
+				}
+			}
+			window.requestAnimationFrame(draw);
+		</script>
+	</body>
+</html>

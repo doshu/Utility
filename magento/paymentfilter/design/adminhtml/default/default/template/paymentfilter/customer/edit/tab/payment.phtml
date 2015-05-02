@@ -1,0 +1,40 @@
+<?php
+	$pf = Mage::getModel('paymentfilter/pf');
+	
+?>
+<div class="entry-edit">
+	<div class="entry-edit-head">
+    	<h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Seleziona metodi di pagamento concessi'); ?></h4>
+    	<div class="form-buttons"></div>
+	</div>
+	<div id="" class="fieldset ">
+		<div class="hor-scroll">
+			<table cellspacing="0" class="form-list">
+				<tr>
+					<td class="label">
+						<label for="account_payment_allowed">
+							<?php echo $this->__('Metodi di pagamento'); ?>
+						</label>
+					</td>
+					<td class="value">
+						<?php 
+							$customerPayments = Mage::getModel('paymentfilter/pf')->getCustomerPayment($this->getCustomer());
+							$selected = array();
+							foreach($customerPayments as $customerPayment) {
+								$selected[] = $customerPayment['payment'];
+							}
+						?>
+						<select name="account[Payment][allowed][]" id="account_payment_allowed" multiple="multiple">
+							<?php foreach($pf->getAvailablePayment() as $code => $name) : ?>
+								<option value="<?=$code;?>" <?php echo in_array($code, $selected)?'selected="selected"':''; ?>>
+									<?=$name;?>
+								</option>
+							<?php endforeach;?>
+						</select>    
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Doshu_Rewards>
+      <active>true</active>
+      <codePool>local</codePool>            
+      <version>0.1.1</version>
+    </Doshu_Rewards>
+  </modules>
+</config>

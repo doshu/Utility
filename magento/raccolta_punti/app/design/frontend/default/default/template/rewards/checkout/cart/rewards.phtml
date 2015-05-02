@@ -1,0 +1,33 @@
+<div class="discount">
+	<h2><?php echo $this->__('Raccolta Punti'); ?></h2>
+	<?php if(Mage::getSingleton('customer/session')->isLoggedIn()) : ?>
+		<p><?php echo $this->__('Con questo ordine guadagnerai %s Punti', $this->getCurrentOrderPoints()); ?></p>
+		<?php 
+			$type = strtolower(Mage::getStoreConfig('customer/rewards/type'));
+			$discountTxt = $type == 'fixed'?$this->__('a'):$this->__('al');
+			
+			$baseCurrencyCode = Mage::app()->getStore()->getBaseCurrencyCode(); 
+			$currentCurrencyCode = Mage::app()->getStore()->getCurrentCurrencyCode(); 
+			$discount = $this->getPossibleDiscount();
+			$precision = 2;
+			if($type == 'fixed')
+				$discountR = Mage::app()->getLocale()->currency($currentCurrencyCode)->toCurrency($discount, array('precision'=>$precision));
+			else
+				$discountR = $discount.'%';
+		?>
+		<p><?php echo $this->__('Attualmente hai raccolto %s punti e hai diritto %s %s di sconto!', $this->getUserPoints(), $discountTxt, $discountR); ?> </p>
+		<?php if($discount > 0): ?>
+			<?php if(Mage::getModel('customer/session')->getData('doshu_use_points') !== true) : ?>
+				<p>
+					<button class="button" onclick="window.location.href = '<?php echo Mage::getBaseUrl()?>rewards/customer/usepoints'"><span><span><?php echo $this->__('Ricevi lo sconto adesso'); ?></span></span></button>
+				</p>
+			<?php else : ?>
+				<p>
+					<button class="button" onclick="window.location.href = '<?php echo Mage::getBaseUrl()?>rewards/customer/notusepoints'"><span><span><?php echo $this->__('Utilizza i punti la prossima volta'); ?></span></span></button>
+				</p>
+			<?php endif; ?>
+		<?php endif; ?>
+	<?php else: ?>
+		<p><?php echo $this->__('Accedi o Registrati per poter utilizzare la raccolta punti'); ?></p>
+	<?php endif; ?>
+</div>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+ 		<customer translate="title" module="customer">
+   			<children>
+				<customer_log module="various">
+					<title>Log Accessi</title>
+					<action>dlog/index/customer</action>
+					<sort_order>200</sort_order>
+				</customer_log>
+   			</children>
+ 		</customer>
+	</menu>
+</config>
+

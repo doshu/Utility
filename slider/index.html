@@ -1,0 +1,279 @@
+<!Doctype html>
+<html>
+	<head>
+		<style>
+		
+			* {
+				margin:0;
+				padding:0;
+			}
+			
+			#sliderContainer {
+				width:800px;
+				margin:auto;
+				border:1px solid #333;
+				box-shadow:0 0 5px #333;
+			}
+			
+			.screen {
+				width:100%;
+				overflow:hidden;
+			}
+			
+			#slider {
+				font-size:0;
+				position:relative;
+			}
+			
+			#slider img {
+				width:800px;
+				display:inline-block;
+			}
+			
+		</style>
+		<script>
+		
+		
+			
+			(function() {
+				var lastTime = 0;
+				var vendors = ['ms', 'moz', 'webkit', 'o'];
+				
+				for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+					window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+					window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+				}
+				
+				if (!window.requestAnimationFrame) {
+					window.requestAnimationFrame = function(callback, element) {
+						var currTime = new Date().getTime();
+						var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+						var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
+						lastTime = currTime + timeToCall;
+						return id;
+					};
+				}
+				if (!window.cancelAnimationFrame) {
+					window.cancelAnimationFrame = function(id) {
+						clearTimeout(id);
+					};
+				}
+			}()); 
+			
+			
+			
+			
+			function Slider(options) {
+				
+				this.options = options;
+				this.sliderWidth = 0;
+				this.screen = options.screen;
+				this.screenWidth = options.screen.clientWidth;
+				this.offset = 0;
+				this.images = options.element.children;
+				this.element = options.element;
+				this.speed = options.duration;
+				this.end = 0;
+				
+				
+				for(i = 0; i < this.images.length; i++) {
+					if(this.images[i].nodeName.toLowerCase() == 'img') {
+						this.sliderWidth += this.images[i].clientWidth;
+					}
+				}
+				
+				this.element.style.width = this.sliderWidth+'px';
+				this.element.style.left = '0px';
+				
+				
+				this._waitToStop = function(slider, param, end, speed) {
+					if(slider.element.stopAnimate == false) {
+						this.animate(slider.element, param, end, speed);
+					}
+					else {
+						setTimeout(function() {
+							that._waitToStop(slider, 'left', end, speed);
+						}, 0);
+					}
+				}
+				
+				
+				this.changeFunction = function(that) {
+					return function() {
+						if(that.offset == that.images.length -1) {
+							that.moveTo(0, true);
+						}
+						else {
+							that.moveTo(that.offset+1, true);
+						}	
+					}
+				}(this);
+				
+				this.autoChangeTimeout = setTimeout(this.changeFunction, this.options.change);
+				
+				
+				if(this.options.stopOver) {
+				
+					this.screen.onmouseenter = function(that) {
+						return function() {
+							clearTimeout(that.autoChangeTimeout);
+							that.element.stopAnimate = true;
+						};
+					}(this);
+					
+					
+					this.screen.onmouseleave = function(that) {
+						return function() {
+							clearTimeout(that.autoChangeTimeout);
+							that.autoChangeTimeout = setTimeout(that.changeFunction, that.options.change);
+						};
+					}(this);
+					
+					
+				}
+				
+				this.moveTo = function(position, auto) {
+				
+					if(auto != true) {
+						clearTimeout(this.autoChangeTimeout);
+					}
+					
+					var toMove = position;
+					this.offset = position;
+					//var start = this.sliderWidth * offset;
+					var end = -(this.screenWidth * toMove);
+					this.end = end;
+					
+					if(this.element.animationTimeout != null) {
+						this.reset = true;
+						return true;
+					}
+					/*
+					if(this.element.animationTimeout != null) {
+						this.element.stopAnimate = true;
+						var that = this;
+						setTimeout(function() {
+							that._waitToStop(that, 'left', end, that.speed);
+						}, 0);
+					}
+					*/
+					
+					
+					this.animate(this.element, 'left', end, this.speed);
+				}
+				
+				
+				this._draw = function (element, param, movePerFrame, remainingFrame, fps, self) {
+				
+					if(this.reset == true) {
+					
+						var current = parseFloat(window.getComputedStyle(element).getPropertyValue(param));
+						var delta = this.end - current;
+				
+						fps = 60; //animazioni a 60fps
+				
+						var frame = Math.ceil((this.speed/1000)*fps);
+				
+						movePerFrame = delta/frame;
+				
+						remainingFrame = frame;
+						
+						this.reset = false;
+					}
+					
+				
+					element.style[param] = (parseFloat(window.getComputedStyle(element).getPropertyValue(param)) + movePerFrame)+'px';
+				
+					remainingFrame--;
+					if(remainingFrame > 0) {
+						element.animationTimeout = window.requestAnimationFrame(function() {
+							self._draw(element, param, movePerFrame, remainingFrame, fps, self);
+						},(1/fps)*1000);
+					}
+					else {
+						window.cancelAnimationFrame(element.animationTimeout);
+						element.animationTimeout = null;
+						if(!element.stopAnimate) {
+							self.autoChangeTimeout = setTimeout(self.changeFunction, self.options.change);
+						}
+						else {
+							element.stopAnimate = false;
+						}
+					}
+				
+					/*
+					if(element.stopAnimate) {
+						element.stopAnimate = false;
+					}
+					*/
+				}
+				
+				
+				this.animate = function (element, param, value, duration) {
+					
+					var current = parseFloat(window.getComputedStyle(element).getPropertyValue(param));
+					var delta = value - current;
+				
+					var fps = 60; //animazioni a 60fps
+				
+					var frame = Math.ceil((duration/1000)*fps);
+				
+					var movePerFrame = delta/frame;
+				
+					var remainingFrame = frame;
+				
+					var that = this;
+					
+					element.stopAnimate = false;
+					element.animationTimeout = window.requestAnimationFrame(function() {
+						that._draw(element, param, movePerFrame, remainingFrame, fps, that);
+					},0);
+				
+				}
+				
+				
+				
+				
+			}
+			
+		</script>
+	</head>
+	<body>
+		
+		<div id="sliderContainer">
+			<div class="screen">
+				<div id="slider">
+					<img src="img/gatto1.jpg" />
+					<img src="img/gatto2.jpg" />
+					<img src="img/gatto3.jpg" />
+					<img src="img/gatto4.jpg" />
+				</div>
+			</div>
+			<div>
+				<button onclick="slider.moveTo(0);">1</button>
+				<button onclick="slider.moveTo(1);">2</button>
+				<button onclick="slider.moveTo(2);">3</button>
+				<button onclick="slider.moveTo(3);">4</button>
+			</div>
+		</div>
+		<script>
+			var slider = new Slider({
+				element:document.querySelector('#slider'), 
+				screen:document.querySelector('#sliderContainer'), 
+				duration:700,
+				change:2000,
+				stopOver:true
+			});
+		</script>
+		<!--script>
+			animate(document.querySelector('#block1'), 'left', 0 , 2000);
+			animate(document.querySelector('#block2'), 'left', 0 , 1000);
+			
+			setTimeout(function() {
+				document.querySelector('#block1').stopAnimate = true;
+			}, 1000);
+			
+		</script-->
+	</body>
+</html>
+

@@ -1,0 +1,1 @@
+oauth_problem=signature_invalid&debug_sbs=GET&http%3A%2F%2F127.0.0.1%2Futility%2Foauth%2Faccess.php&oauth_consumer_key%3Daaaa%26oauth_nonce%3D157344953851dd5c4ca8a123.63553656%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1373461580%26oauth_token%3D3f1f1708%26oauth_version%3D1.0

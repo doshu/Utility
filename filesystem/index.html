@@ -1,0 +1,46 @@
+<script>
+	
+	function onInitFs (fs) {
+		/*
+		fs.root.getFile(
+			'log.txt', 
+			{create: true}, 
+			function(fileEntry) {
+				fileEntry.createWriter(function(writer) {
+					var blob = new WebKitBlobBuilder();
+					blob.append('asdasd');
+					writer.write(blob.getBlob('text/plain'));
+				});
+  			}, 
+  			null
+  		);
+  		*/
+  		fs.root.getFile(
+  			'log.txt', 
+  			{},
+  			function(fileEntry) {
+  			
+    			fileEntry.file(function(file) {
+      				var reader = new FileReader();
+					reader.onloadend =  function () {console.log(this.result)}
+       				reader.readAsText(file);
+    			});
+
+  			}
+  		);
+	}
+	
+	
+	window.webkitStorageInfo.requestQuota(
+		PERSISTENT,
+		1024*1024,
+		function(grantedBytes) {
+ 		 	window.webkitRequestFileSystem(window.PERSISTENT, grantedBytes, onInitFs, null);
+		}, 
+		function(e) {
+  			console.log('Error', e);
+		}
+	);
+	
+	
+</script>

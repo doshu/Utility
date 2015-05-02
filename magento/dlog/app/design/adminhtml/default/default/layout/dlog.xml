@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+    <dlog_index_customer>
+        <reference name="content">
+            <block type="adminhtml/template" name="dlog_index_customer" template="dlog/index/customer.phtml"></block>
+        </reference>
+    </dlog_index_customer>
+</layout>

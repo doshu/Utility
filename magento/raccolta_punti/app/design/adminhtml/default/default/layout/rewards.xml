@@ -1,0 +1,11 @@
+<layout>
+    <!--adminhtml_customer_edit>
+        <reference name="customer_edit_tabs">
+            <action method="addTab" after="customer_edit_tab_view">
+            	<name>rewards</name>
+            	<block>rewards/adminhtml_customer_edit_tab_rewards</block>
+            	<block_position>2</block_position>
+            </action>
+        </reference>
+    </adminhtml_customer_edit-->
+</layout>

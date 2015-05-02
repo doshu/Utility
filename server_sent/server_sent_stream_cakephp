@@ -1,0 +1,31 @@
+<?php
+
+public function action() {
+
+	/*
+		all'inizio mandare gli header (una sola volta altrimenti ci sono delle sovrapposizioni di messaggi.
+		dopo chiudere l'output buffering che apre normalmente cake
+		aprire un ciclo e mandare il messaggio secondo lo standard e fare flush
+	*/
+
+	header('Content-Type: text/event-stream');
+	header('Cache-Control: no-cache');
+	ob_end_clean();
+	
+	$id = 0;
+	$msg = 'lol';
+		
+	while(1) {
+		$body = "id: ".$id. PHP_EOL;
+		$body .= "data: ".$id++. PHP_EOL;
+		$body .= PHP_EOL;
+		echo $body;
+		ob_flush();
+		flush();
+		sleep(1);
+	}
+	exit;
+
+}
+	
+?>

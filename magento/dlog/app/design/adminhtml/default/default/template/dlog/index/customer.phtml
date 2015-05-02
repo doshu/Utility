@@ -1,0 +1,121 @@
+<?php
+
+	$logModel = Mage::getSingleton('dlog/customer');
+	$formUrl = Mage::helper("adminhtml")->getUrl("dlog/index/customer");
+	$key = $this->getFormKey();
+	$customers = Mage::getModel('customer/customer')->getCollection()->setOrder('name');
+	$customerSet = array();
+	foreach($customers as $customer) {
+		$customer = Mage::getModel('customer/customer')->load($customer->getEntityId());
+		$customerName = $customer->getName();
+		if($defaultBilling = $customer->getDefaultBilling()) {
+			$defaultBilling = Mage::getModel('customer/address')->load($defaultBilling);
+			if($company = $defaultBilling->getCompany()) {
+				$customerName .= ', '.$company;
+			}
+		}
+		
+		$customerSet[$customer->getEntityId()] = $customerName;
+	}
+	
+?>
+
+<div id="logContainer">
+	<form action="<?=$formUrl;?>" method="post" id="logForm">
+		<table style="width:50%;">
+			<tr>
+				<td><?php echo $this->__('Seleziona Clienti'); ?></td>
+				<td><?php echo $this->__('Seleziona data iniziale'); ?></td>
+				<td><?php echo $this->__('Seleziona data finale'); ?></td>
+			</tr>
+			<tr>
+				<td>
+					<select name="customer[]" id="customer" class="select" multiple="multiple" style="max-height:200px;">
+						<?php 
+						
+						foreach($customerSet as $customerId => $customerName): ?>
+							<option value="<?=$customerId?>">
+								<?php
+									echo $customerName;
+								?>
+							</option>
+						<?php endforeach; ?>
+					</select>
+				</td>
+				<td><input type="text" name="from" id="from" class="input-text required-entry validate-date-au"></td>
+				<td><input type="text" name="to" id="to" class="input-text required-entry validate-date-au"></td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align:left; padding-top:20px;"><button type="submit"><?php echo $this->__('Mostra log Accessi'); ?></button></td>
+			</tr>
+		</table>
+		<input type="hidden" name="form_key" value="<?=$key?>">
+	</form>
+</div>
+<?php 
+
+	$result = $logModel->result;
+	
+	if($result) :
+?>
+	<div style="margin-top:30px;"><b>Risultato Accessi Clienti</b></div>
+	<?php
+		$periodFrom = new DateTime($logModel->from);
+		$periodFrom->setTimezone(new DateTimeZone(Mage::app()->getStore()->getConfig('general/locale/timezone')));
+		$periodFrom = $periodFrom->format('d/m/Y');
+		
+		$periodTo = new DateTime($logModel->to);
+		$periodTo->setTimezone(new DateTimeZone(Mage::app()->getStore()->getConfig('general/locale/timezone')));
+		$periodTo = $periodTo->format('d/m/Y');
+		
+		foreach($result as $customerId => $collection) :
+	?>
+			<div class="entry-edit">
+				<div class="entry-edit-head" style="color:#FFF;">
+					Accessi eseguiti da <?php echo $customerSet[$customerId]; ?>, periodo 
+					<?php echo $periodFrom.' - '.$periodTo; ?> 
+					per un totale di <?php echo count($collection)?> accessi.
+					
+				</div>
+				<fieldset>
+				<?php foreach($collection as $entry) : ?>
+					<div>
+						<?php 
+							$loginAt = new DateTime($entry->getLoginAt());
+							$loginAt->setTimezone(new DateTimeZone(Mage::app()->getStore()->getConfig('general/locale/timezone')));
+							echo $loginAt->format('d/m/Y H:i:s'); 
+						?>
+					</div>
+				<?php endforeach; ?>
+				</fieldset>
+			</div>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+<style>
+	#logContainer {
+		padding:5px;
+		background: url("<?php echo Mage::getDesign()->getSkinUrl('images/'); ?>/filter_row_bg.gif") repeat-x scroll 0 0 #E3EFF1
+	}
+</style>
+
+<?php echo $this->helper('core/js')->includeScript('varien/form'); ?>
+<script>
+	Calendar.setup({
+		inputField : 'from',
+		ifFormat : '%d/%m/%Y',
+		align : 'Bl',
+		singleClick : true
+	});
+	
+	Calendar.setup({
+		inputField : 'to',
+		ifFormat : '%d/%m/%Y',
+		align : 'Bl',
+		singleClick : true
+	});
+	
+	var feeForm = new VarienForm('logForm', true);
+
+
+</script>
